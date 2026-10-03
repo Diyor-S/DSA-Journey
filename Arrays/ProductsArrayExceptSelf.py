@@ -18,17 +18,20 @@ class Solution:
 
         Now the task is to understand that brute force was failing because we were recalculating the products that we already calculated. To avoid this, we need to somehow preserve the already calculated products and differentiate when to use those products seemlessly.
         
-        I found the pattern, so in this problem, we can take everything from the left, and everything from the right
-        """
-        left = [0] * len(nums) # O(n) memory
-        right = [0] * len(nums) # O(n) memory
-        # 2*O(n) => O(n) - we drop the constants
+        I found the pattern, so in this problem, we can take everything from the left, and everything from the right.
+        
+        Last time memory complexity was O(n)
+        Now to reach O(1) memory complexity, auxiliary complexity.
 
-        left_total = 1 # Left product accumulation O(1) memory
+
+    """
+        result = [0] * len(nums) # Technically this is O(n), but auxiliary space O(1).
+
+        left_total = 1
 
         for i in range(len(nums)): # O(n)
             # First add the product
-            left[i] = left_total
+            result[i] = left_total
             # Only then update the left product by current index value
             left_total *= nums[i] # O(1)
             
@@ -37,21 +40,32 @@ class Solution:
         
         # The only difference, iterate backwards
         for i in range(len(nums) - 1, -1, -1):
-            right[i] = right_total
+            result[i] *= right_total
             right_total *= nums[i]
-
-        # Allocate the new array for the final result
-        result = [] # O(n) memory
-
-        # Iteration O(n)
-        for i in range(len(nums)): 
-            product = left[i] * right[i]
-            result.append(product)
         
         return result        
 
 
 """
+Final Solution 4:
+
+Almost the same as Solution 3.
+But removed left and right array that were allocated which accounted for O(n) auxiliary space, 
+
+now with Solution 4, we just left result, and updated left to result directly, and multiplied by the right when iterating backwardly.
+
+That way:
+
+MC: 
+O(n) - overall memory allocated
+O(1) - overall auxiliary space
+
+So final verdict: O(1) auxiliary space.
+
+TC:
+
+It remained the same as O(n).
+
 
 Solution 3:
 
